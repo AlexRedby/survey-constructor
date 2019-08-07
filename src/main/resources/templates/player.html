@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey player</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <!-- My CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div class="container">
+        <form method="post" th:object="${responseSurvey}" id="form" onsubmit="return false;">
+            <h1 class="text-center" th:text="${survey.name}">Survey player</h1>
+
+            <input type="hidden" name="survey.id" th:value="${survey.id}">
+
+            <div class="mb-3" th:each="question, i : ${survey.questions}">
+                <h5 th:text="${i.count} + '. ' + ${question.text}">Question text</h5>
+                <th:block th:switch="${question.type}">
+                    <th:block th:case="${T(ru.alex.survey.persistence.models.survey.QuestionType).STRING_INPUT}">
+
+                        <input type="hidden" name="answers.question.id" th:value="${question.id}">
+                        <input type="hidden" name="answers.type"
+                               th:value="${T(ru.alex.survey.persistence.models.survey.QuestionType).STRING_INPUT.type}">
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="answers.answer" placeholder="Enter answer">
+                        </div>
+
+                    </th:block>
+                    <th:block th:case="*"
+                              th:with="inputType=(${question.type ==
+                                       T(ru.alex.survey.persistence.models.survey.QuestionType).SINGLE_CHOICE}
+                                       ? 'radio' : 'checkbox')">
+
+                        <div class="form-check" th:each="answer, j : ${question.answerOptions}">
+                            <input type="hidden" name="answers.question.id" th:value="${question.id}">
+                            <input type="hidden" name="answers.type"
+                                   th:value="${T(ru.alex.survey.persistence.models.survey.QuestionType).SINGLE_CHOICE.type}">
+                            <input class="form-check-input" th:type="${inputType}"
+                                   th:name="'answers.answer'" th:value="${answer.id}" th:id="'answer-' + ${answer.id}">
+                            <label th:for="'answer-' + ${answer.id}" th:text="${answer.text}"></label>
+                        </div>
+
+                    </th:block>
+                </th:block>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success" onclick="sendSurvey()">Save</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- My JS -->
+    <script th:src="@{/js/sendingJson.js}"></script>
+    <script th:src="@{/js/SurveyPlayer.js}"></script>
+    <!-- JQuery Slim JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</body>
+</html>

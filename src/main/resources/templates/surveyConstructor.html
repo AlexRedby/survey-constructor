@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey constructor</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <!-- My CSS -->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Survey constructor</h1>
+            <!-- Test -->
+<!--            <select th:field="*{type}">-->
+<!--                <option th:each="state : ${T(ru.alex.survey.persistence.models.survey.QuestionType).values()}"-->
+<!--                        th:text="${state.fullName}"-->
+<!--                        th:value="${state}">-->
+
+<!--                </option>-->
+<!--            </select>-->
+
+        <div class="form-group">
+            <label for="surveyName">Survey name:</label>
+            <input type="text" class="form-control" id="surveyName" name="surveyName" placeholder="Enter survey name">
+        </div>
+
+        <div id="questionsBlock">
+            <!-- Input Example -->
+<!--            <div class="card mb-3 shadow-sm" style="display: none">-->
+<!--                <div class="card-header modal-header">-->
+<!--                    <h5 class="mb-0 mr-2 align-self-center">1.</h5>-->
+<!--                    <input type="text" class="form-control" placeholder="Enter question" value="How old are you?">-->
+<!--                    <button type="button" class="close pt-0 pr-1" aria-label="Close">-->
+<!--                        <span>&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <ul class="list-group list-group-flush">-->
+<!--                    <li class="list-group-item">-->
+<!--                        <h6>Question type:</h6>-->
+<!--                        <select class="custom-select">-->
+<!--                            <option disabled>Select type of question</option>-->
+<!--                            &lt;!&ndash; TODO: foreach &ndash;&gt;-->
+<!--                            <option value=1>Single choice</option>-->
+<!--                            <option value=2>Multiple choice</option>-->
+<!--                            <option value=3 selected>Input</option>-->
+<!--                        </select>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Single/Multiple choice Example &ndash;&gt;-->
+<!--            <div class="card mb-3 shadow-sm" style="display: none;">-->
+<!--                <div class="card-header modal-header">-->
+<!--                    <h5 class="mb-0 mr-2 align-self-center">2.</h5>-->
+<!--                    <input type="text" class="form-control" placeholder="Enter question" value="What programming languages do you know?">-->
+<!--                    <button type="button" class="close pt-0 pr-1" aria-label="Close">-->
+<!--                        <span>&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <ul class="list-group list-group-flush">-->
+<!--                    <li class="list-group-item">-->
+<!--                        <h6>Question type:</h6>-->
+<!--                        <select class="custom-select">-->
+<!--                            <option disabled>Select type of question</option>-->
+<!--                            &lt;!&ndash; TODO: foreach &ndash;&gt;-->
+<!--                            <option value=1>Single choice</option>-->
+<!--                            <option value=2 selected>Multiple choice</option>-->
+<!--                            <option value=3>Input</option>-->
+<!--                        </select>-->
+<!--                    </li>-->
+<!--                    <li class="list-group-item">-->
+<!--                        <h6>Answer options:</h6>-->
+<!--                        <div class="form-group d-flex">-->
+<!--                            <input type="text" class="form-control" placeholder="Enter answer" value="Java">-->
+<!--                            <button type="button" class="btn btn-danger ml-3" aria-label="Close">-->
+<!--                                Remove-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="form-group d-flex">-->
+<!--                            <input type="text" class="form-control" placeholder="Enter answer" value="C++">-->
+<!--                            <button type="button" class="btn btn-danger ml-3" aria-label="Close">-->
+<!--                                Remove-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="form-group d-flex">-->
+<!--                            <input type="text" class="form-control" placeholder="Enter answer" value="C#">-->
+<!--                            <button type="button" class="btn btn-danger ml-3" aria-label="Close">-->
+<!--                                Remove-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="form-group d-flex">-->
+<!--                            <input type="text" class="form-control" placeholder="Enter answer" value="Prolog">-->
+<!--                            <button type="button" class="btn btn-danger ml-3" aria-label="Close">-->
+<!--                                Remove-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="text-center">-->
+<!--                            <button class="btn btn-secondary">Add answer option</button>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
+        </div>
+
+
+        <div class="text-center mb-3">
+            <button type="button" class="btn btn-primary" onclick="addQuestion()">Add question</button>
+        </div>
+        <div class="text-center">
+            <button type="button" class="btn btn-success" onclick="sendSurvey()">Save survey</button>
+        </div>
+    </div>
+
+    <!-- My JS -->
+    <script th:src="@{/js/sendingJson.js}"></script>
+    <script th:src="@{/js/SurveyConstructor.js}"></script>
+    <!-- JQuery Slim JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+</body>
+</html>
