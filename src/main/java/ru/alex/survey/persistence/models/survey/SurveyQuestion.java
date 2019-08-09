@@ -12,10 +12,11 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "QUESTIONS")
 public class SurveyQuestion implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long id;
 

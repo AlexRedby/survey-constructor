@@ -16,10 +16,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"survey"}, allowSetters = true)
+@Table(name = "RESPONSE_SURVEYS")
 public class ResponseSurvey implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
     private Long id;
     //private User user;

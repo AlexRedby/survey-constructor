@@ -11,5 +11,5 @@ import ru.alex.survey.persistence.models.survey.Survey;
 public interface ResponseSurveyRepository extends CrudRepository<ResponseSurvey, Long> {
 
     @Query("select distinct rs from ResponseSurvey rs inner join fetch rs.answers where rs.survey = :survey")
-    Iterable<ResponseSurvey> findAllBySurveyId(@Param("survey") Survey survey);
+    Iterable<ResponseSurvey> findAllBySurvey(@Param("survey") Survey survey);
 }

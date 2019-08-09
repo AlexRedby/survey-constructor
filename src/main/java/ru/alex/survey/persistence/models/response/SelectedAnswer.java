@@ -1,16 +1,13 @@
 package ru.alex.survey.persistence.models.response;
 
-import lombok.Data;
 import lombok.ToString;
 import ru.alex.survey.persistence.models.survey.AnswerOption;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @ToString(callSuper = true)
+@Table(name = "SELECTED_ANSWERS")
 public class SelectedAnswer extends UserAnswer<AnswerOption> {
 
     @ManyToOne(fetch = FetchType.EAGER)

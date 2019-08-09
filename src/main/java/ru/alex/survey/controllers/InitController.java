@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.alex.survey.persistence.models.survey.AnswerOption;
 import ru.alex.survey.persistence.models.survey.QuestionType;
 import ru.alex.survey.persistence.models.survey.Survey;
+import ru.alex.survey.persistence.models.survey.AnswerOption;
 import ru.alex.survey.persistence.models.survey.SurveyQuestion;
 import ru.alex.survey.persistence.repositories.SurveyRepository;
+import ru.alex.survey.persistence.repositories.jdbc.AnswerOptionDao;
+import ru.alex.survey.persistence.repositories.jdbc.SurveyDao;
+import ru.alex.survey.persistence.repositories.jdbc.SurveyQuestionDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +20,25 @@ import java.util.List;
 @RequestMapping("/init")
 public class InitController {
 
-    SurveyRepository surveyRepository;
+    /*private SurveyRepository surveyRepository;
 
     @Autowired
     public InitController(SurveyRepository surveyRepository) {
-        super();
         this.surveyRepository = surveyRepository;
+    }*/
+
+    private SurveyDao surveyDao;
+    private SurveyQuestionDao surveyQuestionDao;
+    private AnswerOptionDao answerOptionDao;
+
+    @Autowired
+    public InitController(SurveyDao surveyDao,
+                          SurveyQuestionDao surveyQuestionDao,
+                          AnswerOptionDao answerOptionDao
+    ) {
+        this.surveyDao = surveyDao;
+        this.surveyQuestionDao = surveyQuestionDao;
+        this.answerOptionDao = answerOptionDao;
     }
 
     @GetMapping
@@ -79,7 +95,16 @@ public class InitController {
         s.setName("Test Survey");
         s.setQuestions(questions);
 
-        surveyRepository.save(s);
+        // JPA
+        //surveyRepository.save(s);
+        // JDBC
+        // TODO: Вынести в отдельный метод или добавить в DAO?
+        s = surveyDao.save(s);
+        s.getQuestions().forEach(q -> {
+            q = surveyQuestionDao.save(q);
+            if(q.getType() == QuestionType.SINGLE_CHOICE || q.getType() == QuestionType.MULTIPLE_CHOICE)
+                q.getAnswerOptions().forEach(o -> o = answerOptionDao.save(o));
+        });
 
         return "redirect:/";
     }
