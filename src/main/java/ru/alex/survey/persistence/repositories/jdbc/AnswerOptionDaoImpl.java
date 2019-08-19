@@ -13,6 +13,7 @@ import ru.alex.survey.persistence.models.survey.SurveyQuestion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.List;
 
 @Repository
 public class AnswerOptionDaoImpl implements AnswerOptionDao {
@@ -31,8 +32,8 @@ public class AnswerOptionDaoImpl implements AnswerOptionDao {
     }
 
     @Override
-    public Iterable<AnswerOption> findAllByQuestion(SurveyQuestion surveyQuestion) {
-        Iterable<AnswerOption> options = jdbc.query(
+    public List<AnswerOption> findAllByQuestion(SurveyQuestion surveyQuestion) {
+        List<AnswerOption> options = jdbc.query(
                 "select id, text from Answer_Options where question_id = ?",
                 this::mapRowToAnswerOptionsWithoutQuestion,
                 surveyQuestion.getId()

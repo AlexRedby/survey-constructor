@@ -1,0 +1,29 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- JDBC Database connection settings -->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/surveyDB</property>
+        <property name="connection.username">alex</property>
+        <property name="connection.password">12345678</property>
+        <!-- JDBC connection pool settings ... using built-in test pool -->
+        <property name="connection.pool_size">2</property>
+        <!-- Select our SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <!-- Echo the SQL to stdout -->
+        <property name="show_sql">true</property>
+        <!-- Drop and re-create the database schema on startup -->
+        <property name="hbm2ddl.auto">none</property>
+
+        <mapping class="ru.alex.survey.persistence.models.survey.Survey" />
+        <mapping class="ru.alex.survey.persistence.models.survey.SurveyQuestion" />
+        <mapping class="ru.alex.survey.persistence.models.survey.AnswerOption" />
+
+        <mapping class="ru.alex.survey.persistence.models.response.ResponseSurvey" />
+        <mapping class="ru.alex.survey.persistence.models.response.StringAnswer" />
+        <mapping class="ru.alex.survey.persistence.models.response.SelectedAnswer" />
+        <mapping class="ru.alex.survey.persistence.models.response.UserAnswer" />
+    </session-factory>
+</hibernate-configuration>

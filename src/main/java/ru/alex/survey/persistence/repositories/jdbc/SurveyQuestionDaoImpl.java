@@ -14,6 +14,7 @@ import ru.alex.survey.persistence.models.survey.SurveyQuestion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.List;
 
 @Repository
 public class SurveyQuestionDaoImpl implements SurveyQuestionDao {
@@ -32,8 +33,8 @@ public class SurveyQuestionDaoImpl implements SurveyQuestionDao {
     }
 
     @Override
-    public Iterable<SurveyQuestion> findAllBySurvey(Survey survey) {
-        Iterable<SurveyQuestion> questions = jdbc.query(
+    public List<SurveyQuestion> findAllBySurvey(Survey survey) {
+        List<SurveyQuestion> questions = jdbc.query(
                 "select id, text, type from Questions where survey_id = ?",
                 this::mapRowToQuestionWithoutSurvey,
                 survey.getId()

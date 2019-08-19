@@ -1,6 +1,7 @@
 package ru.alex.survey.persistence.repositories.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -20,6 +21,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.List;
 
+@Primary
 @Repository
 public class UserAnswerDaoImpl implements UserAnswerDao {
     JdbcTemplate jdbc;
@@ -37,7 +39,7 @@ public class UserAnswerDaoImpl implements UserAnswerDao {
     }
 
     @Override
-    public Iterable<UserAnswer> findAllByResponseSurvey(ResponseSurvey responseSurvey) {
+    public List<UserAnswer> findAllByResponseSurvey(ResponseSurvey responseSurvey) {
         List<UserAnswer> answers = jdbc.query(
                 "select id, question_id, answer_id from Selected_Answers where response_survey_id = ?",
                 this::mapRowToSelectedAnswerWithoutResponseSurvey,
@@ -58,14 +60,17 @@ public class UserAnswerDaoImpl implements UserAnswerDao {
         PreparedStatementCreatorFactory pscf = null;
         Object answer = null;
         if(userAnswer instanceof StringAnswer) {
+            // "insert into String_Answers (id, question_id, response_survey_id, answer) values (answer_seq.nextval, ?, ?, ?)",
             pscf = new PreparedStatementCreatorFactory(
-                "insert into String_Answers (id, question_id, response_survey_id, answer) values (answer_seq.nextval, ?, ?, ?)",
+                    "insert into String_Answers (question_id, response_survey_id, answer) " +
+                            "values (?, ?, ?)",
                 Types.BIGINT, Types.BIGINT, Types.VARCHAR
             );
             answer = userAnswer.getAnswer();
         } else {
             pscf = new PreparedStatementCreatorFactory(
-                "insert into Selected_Answers (id, question_id, response_survey_id, answer_id) values (answer_seq.nextval, ?, ?, ?)",
+                "insert into Selected_Answers (question_id, response_survey_id, answer_id) " +
+                        "values (?, ?, ?)",
                 Types.BIGINT, Types.BIGINT, Types.BIGINT
             );
             answer = ((AnswerOption) userAnswer.getAnswer()).getId();
@@ -79,6 +84,7 @@ public class UserAnswerDaoImpl implements UserAnswerDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(psc, keyHolder);
+
         return keyHolder.getKey().longValue();
     }
 

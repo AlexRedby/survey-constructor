@@ -2,6 +2,7 @@ package ru.alex.survey.persistence.models.response;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 import ru.alex.survey.persistence.models.survey.QuestionType;
 import ru.alex.survey.persistence.models.survey.SurveyQuestion;
 
@@ -20,8 +21,8 @@ import java.io.Serializable;
 public abstract class UserAnswer<T> implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_generator")
-    @SequenceGenerator(name="answer_generator", sequenceName = "answer_seq")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_generator")
+//    @SequenceGenerator(name="answer_generator", sequenceName = "answer_seq", allocationSize = 1)
     @Column(nullable = false, updatable = false)
     private Long id;
 

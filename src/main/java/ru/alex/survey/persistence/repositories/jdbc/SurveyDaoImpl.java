@@ -12,6 +12,7 @@ import ru.alex.survey.persistence.models.survey.Survey;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,14 +33,19 @@ public class SurveyDaoImpl implements SurveyDao {
     }
 
     @Override
-    public Iterable<Survey> findAll() {
-        return jdbc.query("select id, name from Surveys", this::mapRowToSurvey);
+    public void incrementResponseCountForSurvey(Survey survey) {
+        jdbc.update("update Surveys set response_count = response_count + 1 where ID = ?", survey.getId());
+    }
+
+    @Override
+    public List<Survey> findAll() {
+        return jdbc.query("select id, name, response_count from Surveys", this::mapRowToSurvey);
     }
 
     @Override
     public Optional<Survey> findById(Long id) {
         return Optional.ofNullable(jdbc.queryForObject(
-                "select id, name from Surveys where id = ?",
+                "select id, name, response_count from Surveys where id = ?",
                 this::mapRowToSurvey,
                 id
         ));
@@ -47,11 +53,14 @@ public class SurveyDaoImpl implements SurveyDao {
 
     private long saveSurvey(Survey survey) {
         PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(
-                "insert into Surveys (name) values (?)",
-                Types.VARCHAR
+                "insert into Surveys (name, response_count) values (?, ?)",
+                Types.VARCHAR, Types.INTEGER
         );
         pscf.setReturnGeneratedKeys(true);
-        PreparedStatementCreator psc = pscf.newPreparedStatementCreator(new Object[] {survey.getName()});
+        PreparedStatementCreator psc = pscf.newPreparedStatementCreator(new Object[] {
+                survey.getName(),
+                survey.getResponseCount()
+        });
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(psc, keyHolder);
@@ -63,6 +72,7 @@ public class SurveyDaoImpl implements SurveyDao {
 
         survey.setId(rs.getLong("id"));
         survey.setName(rs.getString("name"));
+        survey.setResponseCount(rs.getInt("response_count"));
 
         return survey;
     }

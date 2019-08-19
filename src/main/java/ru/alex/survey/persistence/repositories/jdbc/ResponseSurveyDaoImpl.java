@@ -1,6 +1,7 @@
 package ru.alex.survey.persistence.repositories.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -13,7 +14,9 @@ import ru.alex.survey.persistence.models.survey.Survey;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.List;
 
+@Primary
 @Repository
 public class ResponseSurveyDaoImpl implements ResponseSurveyDao {
     JdbcTemplate jdbc;
@@ -31,8 +34,8 @@ public class ResponseSurveyDaoImpl implements ResponseSurveyDao {
     }
 
     @Override
-    public Iterable<ResponseSurvey> findAllBySurvey(Survey survey) {
-        Iterable<ResponseSurvey> responseSurveys = jdbc.query(
+    public List<ResponseSurvey> findAllBySurvey(Survey survey) {
+        List<ResponseSurvey> responseSurveys = jdbc.query(
                 "select id from Response_Surveys where survey_id = ?",
                 this::mapRowToResponseSurveyWithoutSurvey,
                 survey.getId()
